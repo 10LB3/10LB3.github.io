@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>在Linux环境安装Maven(保姆级别) | Doris</title><meta name="author" content="lvms"><meta name="copyright" content="lvms"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="注意：安装maven前一定要安装java的环境，如果你不知道怎么安装，可以看一下这两篇文章（选一个版本安装即可） 在Linux系统下安装JDK21（https:&#x2F;&#x2F;blog.csdn.net&#x2F;LMS2022223000&#x2F;article&#x2F;details&#x2F;151021985?fromshare&#x3D;blogdetail&amp;sharetype&#x3D;blogdetail&amp;sharerId&#x3D;15102">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Linux环境安装Maven(保姆级别)">
+<meta property="og:url" content="https://lvmeishuang.cn/post/7bb6fbc0.html">
+<meta property="og:site_name" content="Doris">
+<meta property="og:description" content="注意：安装maven前一定要安装java的环境，如果你不知道怎么安装，可以看一下这两篇文章（选一个版本安装即可） 在Linux系统下安装JDK21（https:&#x2F;&#x2F;blog.csdn.net&#x2F;LMS2022223000&#x2F;article&#x2F;details&#x2F;151021985?fromshare&#x3D;blogdetail&amp;sharetype&#x3D;blogdetail&amp;sharerId&#x3D;15102">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lvmeishuang.cn/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-08-31T16:15:12.000Z">
+<meta property="article:modified_time" content="2025-08-31T16:32:54.143Z">
+<meta property="article:author" content="lvms">
+<meta property="article:tag" content="maven Linux installation">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lvmeishuang.cn/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "在Linux环境安装Maven(保姆级别)",
+  "url": "https://lvmeishuang.cn/post/7bb6fbc0.html",
+  "image": "https://lvmeishuang.cn/img/butterfly-icon.png",
+  "datePublished": "2025-08-31T16:15:12.000Z",
+  "dateModified": "2025-08-31T16:32:54.143Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "lvms",
+      "url": "https://lvmeishuang.cn"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lvmeishuang.cn/post/7bb6fbc0.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '在Linux环境安装Maven(保姆级别)',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/universe.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Doris</span></a><a class="nav-page-title" href="/"><span class="site-name">在Linux环境安装Maven(保姆级别)</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">在Linux环境安装Maven(保姆级别)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-08-31T16:15:12.000Z" title="发表于 2025-09-01 00:15:12">2025-09-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-31T16:32:54.143Z" title="更新于 2025-09-01 00:32:54">2025-09-01</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>注意：安装maven前一定要安装java的环境，如果你不知道怎么安装，可以看一下这两篇文章（选一个版本安装即可）</p>
+<p>在Linux系统下安装JDK21（<a target="_blank" rel="noopener" href="https://blog.csdn.net/LMS2022223000/article/details/151021985?fromshare=blogdetail&sharetype=blogdetail&sharerId=151021985&sharerefer=PC&sharesource=LMS2022223000&sharefrom=from_link">https://blog.csdn.net/LMS2022223000/article/details/151021985?fromshare=blogdetail&amp;sharetype=blogdetail&amp;sharerId=151021985&amp;sharerefer=PC&amp;sharesource=LMS2022223000&amp;sharefrom=from_link</a>)</p>
+<p>在Linux环境安装JDK17（<a target="_blank" rel="noopener" href="https://blog.csdn.net/LMS2022223000/article/details/149581584?fromshare=blogdetail&sharetype=blogdetail&sharerId=149581584&sharerefer=PC&sharesource=LMS2022223000&sharefrom=from_link%EF%BC%89">https://blog.csdn.net/LMS2022223000/article/details/149581584?fromshare=blogdetail&amp;sharetype=blogdetail&amp;sharerId=149581584&amp;sharerefer=PC&amp;sharesource=LMS2022223000&amp;sharefrom=from_link）</a></p>
+<h2 id="0、下载"><a href="#0、下载" class="headerlink" title="0、下载"></a>0、下载</h2><p>官网：<a target="_blank" rel="noopener" href="https://maven.apache.org/download.cgi">https://maven.apache.org/download.cgi</a></p>
+<p>即可下载最新版本的 <code>maven</code></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756650595093-9870897f-eb35-43af-87dc-95915adf157f.png" alt="img"></p>
+<p>下载到本地</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756650672947-339abf06-0c6e-452c-8919-91bf3871aa57.png" alt="img"></p>
+<p>如果想要下载旧版本的 <code>meven</code>，则点击 <code>Maven 3 archives</code>  （<a target="_blank" rel="noopener" href="https://archive.apache.org/dist/maven/maven-3/%EF%BC%89">https://archive.apache.org/dist/maven/maven-3/）</a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756650778408-a90c4519-c3df-4957-82cc-1026f327147d.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756650793430-9d443391-e5fd-458b-be21-0fb56dda85a7.png" alt="img"></p>
+<p>比如说你想要下载 <code>3.1.1</code> 本版的 <code>maven</code>，就点击对应的版本号</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756650894452-eba26879-97a2-41c6-9e82-efa352aef85b.png" alt="img"></p>
+<p>选择 <code>binaries</code></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756650925250-abf091c5-3048-40f9-a845-b69572d67473.png" alt="img"></p>
+<p>同样也是下载 <code>bin.tar.gz</code> 文件，点击即可下载</p>
+<h2 id="1、在Linux上以安装包tar-gz的形式安装"><a href="#1、在Linux上以安装包tar-gz的形式安装" class="headerlink" title="1、在Linux上以安装包tar.gz的形式安装"></a>1、在Linux上以安装包tar.gz的形式安装</h2><h4 id="1-新建文件夹"><a href="#1-新建文件夹" class="headerlink" title="1.新建文件夹"></a>1.新建文件夹</h4><p>(这块的目的是为了新增一个文件夹来存放上面的tar.gz包，笔者喜欢放到&#x2F;java&#x2F;maven下，所以读者也可按照自己的喜好来）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># <span class="number">1.</span>创建一个新的文件夹/java/maven</span><br><span class="line">mkdir -p /java/maven</span><br><span class="line"></span><br><span class="line"># <span class="number">3.</span>进入创建的java包</span><br><span class="line">cd /java/maven</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756651257345-d122f7e9-72e2-44fe-b24e-bbc4bee321d4.png" alt="img"></p>
+<h4 id="2-将文件从本地上传到服务器并解压"><a href="#2-将文件从本地上传到服务器并解压" class="headerlink" title="2.将文件从本地上传到服务器并解压"></a>2.将文件从本地上传到服务器并解压</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rz   #<span class="number">1.</span>上传文件</span><br><span class="line"></span><br><span class="line">ls    #<span class="number">2.</span>打印当前目录，如出现如下结果说明成功上传</span><br><span class="line"></span><br><span class="line">tar -zxvf apache-maven-<span class="number">3.9</span><span class="number">.11</span>-bin.tar.gz #<span class="number">3.</span>解压（zvxf 后面接实际安装包名称）</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1753275931091-ac63802b-3fe4-478b-adbe-a172960c0032.png?x-oss-process=image/format,webp" alt="img"></p>
+<p>如果没有出现这个问题，不用执行2.1；如果出现没找到命令，就从第2.1条里面选自己操作系统的命令执行</p>
+<p>找到自己下载的安装包,将文件上传到服务器</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756651520143-c6e506e2-69d7-4de8-aec7-74e28ad42177.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756651496860-cb5f04d0-73df-4041-9a81-4f42e48394ef.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756651535802-0844b6f4-25ec-47e0-a8d5-f544150835b5.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756651584858-367fc85c-aaa9-4465-86a7-9c3e3f6d1610.png" alt="img"></p>
+<p>选2.1.解决rz未找到，下载 <code>lrzsz</code> 软件包(此处没问题直接跳到三：配置环境）</p>
+<h5 id="CentOS-RHEL-系统"><a href="#CentOS-RHEL-系统" class="headerlink" title="CentOS&#x2F;RHEL 系统"></a>CentOS&#x2F;RHEL 系统</h5><p>打开终端，以 root 用户或者具有 <code>sudo</code> 权限的用户身份执行以下命令</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install lrzsz</span><br></pre></td></tr></table></figure>
+
+<p>执行命令后，系统会提示是否确认安装，输入 <code>y</code> 并回车，等待安装完成即可。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756651448601-9694031e-0b27-49b6-aa2e-95450598de66.png" alt="img"></p>
+<h5 id="Ubuntu-Debian-系统"><a href="#Ubuntu-Debian-系统" class="headerlink" title="Ubuntu&#x2F;Debian 系统"></a>Ubuntu&#x2F;Debian 系统</h5><p>在终端中以 root 用户或者具有 <code>sudo</code> 权限的用户身份执行以下命令：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install lrzsz</span><br></pre></td></tr></table></figure>
+
+<h5 id="Arch-Linux-系统"><a href="#Arch-Linux-系统" class="headerlink" title="Arch Linux 系统"></a>Arch Linux 系统</h5><p>以 root 用户或者具有 <code>sudo</code> 权限的用户身份，在终端执行：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S lrzsz</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ll #<span class="number">4.</span>查看是否解压成功</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756651599514-ee09ee87-5be0-4394-9334-cada86327bdc.png" alt="img"></p>
+<p>进入到解压的包（上面显示蓝色的，每个人的可能都不同，不要照搬）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd apache-maven-<span class="number">3.9</span><span class="number">.11</span>/</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756651900907-e3bbf487-ae69-4a09-8ca9-82cd5b54c1d8.png" alt="img"></p>
+<p>将下面显示的路径和保存下来，下面的地方要用到</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pwd</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756651915049-907d56e4-5f43-4388-8d94-524de93a8f27.png" alt="img"></p>
+<p>接着进行环境变量配置，需要修改 <code>/etc/profile</code> 文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756651977362-e9233ecc-d745-458c-af7e-7d3051bc1bc2.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756652002479-44684ac7-6e56-45c8-8d21-44c735c214eb.png" alt="img"></p>
+<p>按字母i进入编辑模式，在此文件的末尾添加下列命令(注意第一条的路径，是你解压的文件的所在的文件夹的路径pwd的路径！！！，如果和笔者不一样不要直接复制）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export MAVEN_HOME=/java/maven/apache-maven-<span class="number">3.9</span><span class="number">.11</span></span><br><span class="line">export PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756652097595-bccf68c6-59ad-44c2-b869-77b0103d9624.png" alt="img"></p>
+<p>Esc                #退出编辑模式</p>
+<p>：                #切换到末行模式</p>
+<p>wq                 #保存并退出</p>
+<p>重新加载配置文件试其生效</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756652131648-e9f561db-4fa7-4371-a781-af36fb7a5df5.png" alt="img"></p>
+<p>验证 通过 <code>mvn -v</code> 命令查看配置是否生效</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn -v</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756652654695-94e7906a-f4d3-48f5-b352-7e7b905e50e3.png" alt="img"></p>
+<p>如果有打印出 <code>maven</code> 的版本信息，就表明 <code>maven</code> 已经安装和配置成功了</p>
+<h2 id="四、镜像资源配置"><a href="#四、镜像资源配置" class="headerlink" title="四、镜像资源配置"></a>四、镜像资源配置</h2><p>创建一个文件夹作为 <code>maven 仓库</code>，用于存放 <code>maven</code> 下载的依赖</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /java/maven-repository</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756652763924-f9f1edf3-b1d8-46b1-9e7e-8348374b3e17.png" alt="img"></p>
+<p>查看</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756652797180-19f456f3-24cb-4aae-bc8b-8aa2b29c5c33.png" alt="img"></p>
+<p>记住下面pwd的路径，后面需要用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd maven-repository/</span><br><span class="line">pwd</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756653115353-b4d38369-01d0-44cd-936b-f181839149ee.png" alt="img"></p>
+<p>使用 <code>cd</code> 命令进入到 <code>maven</code> 的 <code>conf</code> 目录中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /java/maven</span><br><span class="line">ls</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756652904946-84a19ea1-d6f8-4ae7-bbf9-c904e1afb573.png" alt="img"></p>
+<p>进入到蓝色的，每个人可能不一样，不要照搬</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd apache-maven-<span class="number">3.9</span><span class="number">.11</span>/</span><br><span class="line"></span><br><span class="line">ls</span><br><span class="line"></span><br><span class="line">cd conf</span><br><span class="line"></span><br><span class="line">ls</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756652972211-86162612-0b9e-4170-89ec-e001215d7991.png" alt="img"></p>
+<p>编辑 <code>setting.xml</code> 文件</p>
+<p>将仓库地址设置成刚刚新建的文件夹 <code>maven-repository</code></p>
+<p>如果不太了解vim可以看这篇文章<a target="_blank" rel="noopener" href="https://blog.csdn.net/LMS2022223000/article/details/149615962?fromshare=blogdetail&sharetype=blogdetail&sharerId=149615962&sharerefer=PC&sharesource=LMS2022223000&sharefrom=from_link">https://blog.csdn.net/LMS2022223000/article/details/149615962?fromshare=blogdetail&amp;sharetype=blogdetail&amp;sharerId=149615962&amp;sharerefer=PC&amp;sharesource=LMS2022223000&amp;sharefrom=from_link</a> 里面可以用底线模式迅速去找到目标</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim settings.xml</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756653036672-e060edc2-af17-44da-9544-20268270d3d6.png" alt="img"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;localRepository&gt;/java/maven-repository&lt;/localRepository&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756653457292-e9a2eaf6-8f50-4e26-8a5f-50bc963df8e1.png" alt="img"></p>
+<p>设置阿里云的镜像地址</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;mirror&gt;</span><br><span class="line">  &lt;id&gt;alimaven&lt;/id&gt;</span><br><span class="line">  &lt;name&gt;aliyun maven&lt;/name&gt;</span><br><span class="line">  &lt;mirrorOf&gt;central&lt;/mirrorOf&gt;</span><br><span class="line">  &lt;url&gt;http:<span class="comment">//maven.aliyun.com/nexus/content/groups/public/&lt;/url&gt;</span></span><br><span class="line">&lt;/mirror&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/40428171/1756653736688-44da01ab-36c0-4c1b-8393-3423454ea806.png" alt="img"></p>
+<p><code>保存</code> 即可 ~~ </p>
+<p>至此安装全部完成~</p>
+<h2 id="完美撒花"><a href="#完美撒花" class="headerlink" title="完美撒花~~"></a>完美撒花~~</h2></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lvmeishuang.cn">lvms</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lvmeishuang.cn/post/7bb6fbc0.html">https://lvmeishuang.cn/post/7bb6fbc0.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lvmeishuang.cn" target="_blank">Doris</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/maven-Linux-installation/">maven Linux installation</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width no-desc" href="/post/6e94e1f.html" title="文"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">文</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">lvms</div><div class="author-info-description">以终为始</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://blog.csdn.net/LMS2022223000?type=blog"><i class="iconfont icon-youxishoubing"></i><span>跳转到博主的CSDN</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content"><b><font color="#e66b6d">双</font> <font color="#e66d98">手</font> <font color="#e66cc6">合</font> <font color="#cc6de6">十</font> <font color="#9770e6">成</font> <font color="#6d93e6">为</font> <font color="#6fcde6">自</font> <font color="#72e6b6">己</font> <font color="#72e689">的</font> <font color="#99e670">神</font>, <font color="#cde670">自</font> <font color="#e6df72">己</font> <font color="#e6c073">所</font> <font color="#e6a271">信</font> <font color="#e6796f">念</font> <font color="#e65454">的</font> <font color="#e63333">即</font> <font color="#e62c2c">是</font> <font color="#e60101">信</font> <font color="#e60101">仰</font></b> <p align="center"><img src="https://blog.haiyong.site/img/img-blog.csdnimg.cn/f7384c88956d4378b72e47548e19c9f8.gif" width="50" alt="mao"></p></div></div><div class="xpand" style="height:200px;"><canvas class="illo" width="800" height="800" style="max-width: 200px; max-height: 200px; touch-action: none; width: 640px; height: 640px;"></canvas></div><script src="https://fastly.jsdelivr.net/gh/xiaopengand/blogCdn@latest/xzxr/twopeople1.js"></script><script src="https://fastly.jsdelivr.net/gh/xiaopengand/blogCdn@latest/xzxr/zdog.dist.js"></script><script id="rendered-js" src="https://fastly.jsdelivr.net/gh/xiaopengand/blogCdn@latest/xzxr/twopeople.js"></script><style>.card-widget.card-announcement {
+margin: 0;
+align-items: center;
+justify-content: center;
+text-align: center;
+}
+canvas {
+display: block;
+margin: 0 auto;
+cursor: move;
+}</style><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0%E3%80%81%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.</span> <span class="toc-text">0、下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%9C%A8Linux%E4%B8%8A%E4%BB%A5%E5%AE%89%E8%A3%85%E5%8C%85tar-gz%E7%9A%84%E5%BD%A2%E5%BC%8F%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">1、在Linux上以安装包tar.gz的形式安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">2.0.1.</span> <span class="toc-text">1.新建文件夹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%B0%86%E6%96%87%E4%BB%B6%E4%BB%8E%E6%9C%AC%E5%9C%B0%E4%B8%8A%E4%BC%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B9%B6%E8%A7%A3%E5%8E%8B"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.将文件从本地上传到服务器并解压</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#CentOS-RHEL-%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.0.2.1.</span> <span class="toc-text">CentOS&#x2F;RHEL 系统</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Ubuntu-Debian-%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.0.2.2.</span> <span class="toc-text">Ubuntu&#x2F;Debian 系统</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Arch-Linux-%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.0.2.3.</span> <span class="toc-text">Arch Linux 系统</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">3.</span> <span class="toc-text">三、配置环境变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%95%9C%E5%83%8F%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE"><span class="toc-number">4.</span> <span class="toc-text">四、镜像资源配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E7%BE%8E%E6%92%92%E8%8A%B1"><span class="toc-number">5.</span> <span class="toc-text">完美撒花~~</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/7bb6fbc0.html" title="在Linux环境安装Maven(保姆级别)">在Linux环境安装Maven(保姆级别)</a><time datetime="2025-08-31T16:15:12.000Z" title="发表于 2025-09-01 00:15:12">2025-09-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/6e94e1f.html" title="文">文</a><time datetime="2025-08-31T04:28:19.000Z" title="发表于 2025-08-31 12:28:19">2025-08-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/4a17b156.html" title="Hello World">Hello World</a><time datetime="2025-08-31T04:19:19.194Z" title="发表于 2025-08-31 12:19:19">2025-08-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/4a17b156.html" title="Hello World">Hello World</a><time datetime="2025-08-31T01:41:47.212Z" title="发表于 2025-08-31 09:41:47">2025-08-31</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By lvms</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script>[object Object]<canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_anzhiyu_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock_anzhiyu')
+    if(parent_div_git) {
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var qweather_key = 'b16a1fa0e63c46a4b8f28abfb06ae3fe';
+  var gaud_map_key = 'e2b04289e870b005374ee030148d64fd&s=rsv3';
+  var baidu_ak_key = 'undefined';
+  var flag = 0;
+  var clock_rectangle = '112.982279,28.19409';
+  var clock_default_rectangle_enable = 'false';
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script><!-- hexo injector body_end end --></body></html>
